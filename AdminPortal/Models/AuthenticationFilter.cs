@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Web.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
-namespace AdminPortal.Models
+namespace AdminPortal.Models;
+
+public class AuthFilter : Attribute, IAuthorizationFilter
 {
-    public class AuthenticationFilter : Microsoft.AspNetCore.Mvc.Filters.ActionFilterAttribute
+    public void OnAuthorization(AuthorizationFilterContext context)
     {
-        public override void OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext context)
-        {
-            if (context.HttpContext.Session.GetString("UserSession") == "" || context.HttpContext.Session.GetString("UserSession") == null || context.HttpContext.Session.GetString("UserRole") == "User")
-            {
-                context.Result = new HttpUnauthorizedResult();
-            }
-        }
-
+        if (context.HttpContext.Session.GetString("UserSession").IsNullOrEmpty())
+            context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
     }
 }
