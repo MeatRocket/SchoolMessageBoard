@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Sign In";
+}
+@model UserViewModel
+@using MessageBoardClassLibrary.Models;
+
+<h1> SignIn</h1>
+
+<form asp-action="SignIn" method="post">
+    <div class="col">
+        <label class="sr-only">Email</label>
+        <input class="form-control" type="email" alt="Email" placeholder="Email" name="Email" />
+    </div>
+
+    <div class="col">
+        <label class="sr-only">Password</label>
+        <input class="form-control" type="password" alt="Password" placeholder="Password" name="Password" />
+    </div>
+    <br />
+    <button class="btn btn-primary mb-2"> Sign In </button>
+
+    <div class="form-group col _errorMessages">
+        <ul class="text-danger">
+            @foreach (var errorMessage in Model.ErrorMessages)
+            {
+                <li>@errorMessage</li>
+            }
+        </ul>
+    </div>
+</form>

@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "Edit School";
+}
+@using MessageBoardClassLibrary.Models;
+@model AdminViewModel
+
+<h1> Edit @Model.EditSchool.Name Info</h1>
+
+<form asp-action="EditSchool" method="post">
+    <input type="hidden" value="@Model.EditSchool.Id" name="EditSchool.Id" />
+    <div class="row">
+        <div class="col">
+            <label class="sr-only">School Name</label>
+            <input class="form-control" type="text" alt="School Name" placeholder="School Name" name="SchoolName" value="@Model.EditSchool.Name" />
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-md-2 _formSelector">
+            <label>Area</label>
+            <select class="form-control" name="AreaId" id="AreaId">
+                <option value="" selected>Select an Area</option>
+                @foreach (Area area in @Model.Areas)
+                {
+                    <option value="@area.Id">@area.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <br />
+    <button class="btn btn-primary mb-2"> Update </button>
+
+</form>

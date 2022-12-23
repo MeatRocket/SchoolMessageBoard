@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "Manage Schools";
+}
+@using MessageBoardClassLibrary.Models;
+@model AdminViewModel
+<link rel="stylesheet" href="~/css/DeletionConfirmation.css" asp-append-version="true" />
+
+<h1>Manage Schools</h1>
+
+<form asp-action="ManageSchools" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="ManageSchools">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table table-striped table-hover table-responsive">
+    <thead>
+        <tr>
+            <th><a class="_noDecoration" href="@Url.Action("ManageSchools", new { sortField = "schoolName", sortOrder = ViewBag.SortOrder })">Name</a></th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageSchools", new { sortField = "areaName", sortOrder = ViewBag.SortOrder })">Area Name</a></th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageSchools", new { sortField = "fieldName", sortOrder = ViewBag.SortOrder })">District Name</a></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (School school in Model.Schools)
+        {
+            <tr>
+                <td>@school.Name</td>
+                <td>@school.Area.Name</td>
+                <td>@school.Area.Field.Name</td>
+                <td><a class="btn btn-primary" href="@Url.Action("EditSchool", new{SchoolId = school.Id})">Edit</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+

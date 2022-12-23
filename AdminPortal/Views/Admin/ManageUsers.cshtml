@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Manage Users";
+}
+@using MessageBoardClassLibrary.Models;
+@using System.Web;
+@model AdminViewModel
+
+    <link rel="stylesheet" href="~/css/DeletionConfirmation.css" asp-append-version="true" />
+
+<h1>Manage Users</h1>
+
+<form asp-action="ManageUsers" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="ManageUsers">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<table class="table table-striped table-hover table-responsive">
+    <thead>
+        <tr>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "user", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Name</a></th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "email", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Email</a></th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "role", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Role</a></th>
+            <th>School</th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "valid", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Is Valid</a></th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "active", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Is Active</a></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (User user in Model.Users)
+        {
+            <tr id="@user.Id">
+                <td>@user.FirstName @user.LastName</td>
+                <td>@user.Email</td>
+                <td>@user.Role</td>
+
+                <td>
+                    @foreach (SchoolUser school in user.Schools)
+                    {
+                        @school.School.Name
+                        <br />
+                    }
+                </td>
+
+                <td>@user.IsValidated</td>
+                <td>@user.IsActivated</td>
+                <td><a class="btn btn-primary" href="@Url.Action("EditUser",new{Id = user.Id}) ">Edit</a></td>
+                <td><button class="btn btn-danger" onclick="ShowPopup('@user.Id')">Delete</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@for (int i = 1; i <= ViewBag.TotalSize; i++)
+{
+    <a class="_noDecoration" href="@Url.Action("ManageUsers", new{ PageNumber = i})">
+        @i
+    </a>
+}
+
+@foreach (User user in Model.Users)
+{
+    <div class="_popUp _@user.Id">
+        <div class="_deleteConfirmation">
+        <h3> Are you sure you want to Delete @user.FirstName @user.LastName's Account</h3>
+        <div class="_buttonGroup">
+            <button class="btn btn-danger" onclick="DeleteUser('@user.Id')">Delete</button>
+            <button class="btn btn-primary" onclick="HidePopup('@user.Id')">Cancel</button>
+        </div>
+        </div class="_deleteConfirmation">
+    </div>
+}
+
+<script src="~/js/Delete.js" asp-append-version="true"></script>

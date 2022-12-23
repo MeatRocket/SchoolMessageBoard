@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+@model UserViewModel
+@using MessageBoardClassLibrary.Models;
+<form class="was-validated">
+    <div class="row">
+        <div class="custom-control col">
+            <label>First Name</label>
+            <input class="form-control custom-control-input" type="text" alt="First Name" required placeholder="First Name" name="FirstName" />
+            <div class="invalid-feedback">First name is required!</div>
+
+        </div>
+        <div class="col">
+            <label>Last Name</label>
+            <input class="form-control" type="text" alt="Last Name" required placeholder="Last Name" name="LastName" />
+            <div class="invalid-feedback">Last name is required!</div>
+        </div>
+    </div>
+    <br />
+
+    <div class="col">
+        <label>Email</label>
+        <input class="form-control" type="email" alt="Email" required placeholder="Email" name="Email" />
+        <div class="invalid-feedback">Email is required!</div>
+    </div>
+    <br />
+
+    <div class="col">
+        <label>Confirm Email</label>
+        <input class="form-control" type="email" alt="ConfirmEmail" required placeholder="Confirm Email" name="ConfirmEmail" />
+        <div class="invalid-feedback">Confirm is required!</div>
+    </div>
+    <br />
+
+    <div class="col">
+        <label>Password</label>
+        <input class="form-control" type="password" alt="Password" required placeholder="Password" name="Password" />
+        <div class="invalid-feedback">Password is required!</div>
+    </div>
+    <br />
+
+    <div class="col">
+        <label>Confirm Password</label>
+        <input class="form-control" type="password" alt="ConfirmPassword" required placeholder="Confirm Password" name="ConfirmPassword" />
+        <div class="invalid-feedback"> Confirm Password is required!</div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="form-group col-md-2 _formSelector">
+            <label>Please Choose a Role</label>
+            <select class="form-control" required name="role">
+                <option value="" selected>Select Role</option>
+                <option value="Admin">Admin</option>
+                <option value="User">User</option>
+            </select>
+            <div class="invalid-feedback">Role is required!</div>
+            <br />
+            <button class="btn btn-primary mb-2 _register"> Register </button>
+        </div>
+
+        <div class="form-group col-md-2 _formSelector">
+
+            <label>Please Choose Schools</label>
+            <select class="form-control" required name="Field" id="Field">
+                <option value="" selected>Select a District</option>
+                @foreach (Field field in ViewBag.Fields)
+                {
+                    @if (Model.Schools.Where(x => x.Area.Field.Id == field.Id).ToList().Count != 0)
+                    {
+                        <option value="@field.Id">@field.Name</option>
+                    }
+                }
+            </select>
+            <div class="invalid-feedback">District is required!</div>
+        </div>
+        <div class=" form-group col _checkboxContainer">
+            @foreach (Field field in ViewBag.Fields)
+            {
+                <div class="_hide _checkBox" id="@field.Id" required>
+                    @foreach (School school in Model.Schools.Where(x => x.Area.Field.Id == field.Id))
+                    {
+                        <div class="form-check form-check-inline">
+                            <label class="form-check-label">@school.Name</label>
+                            <input class="form-check-input" type="checkbox" name="schools" value="@school.Id">
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="form-group col _errorMessages">
+            <ul class="text-danger">
+                @foreach (var errorMessage in Model.ErrorMessages)
+                {
+                    <li>@errorMessage</li>
+                }
+            </ul>
+        </div>
+    </div>
+</form>
+
+<script src="~/js/Fields.js"></script>
+

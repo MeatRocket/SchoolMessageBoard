@@ -1,0 +1,9 @@
+﻿@page
+@model RegisterModel
+
+<form asp-action="SignIn" method="post">
+    <input type="email" alt="Email" required placeholder="Email" name="Email" value=@Model.Email >
+    <button> Submit</button>
+</form>
+
+@Model.Email
