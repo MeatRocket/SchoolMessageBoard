@@ -69,6 +69,8 @@ namespace AdminPortal.Controllers
 
             _accessor.HttpContext.Session.SetString("UserSession",user.Id);
             _accessor.HttpContext.Session.SetString("UserRole", user.Role);
+            _accessor.HttpContext.Session.SetString("UserName", user.FirstName +" "+user.LastName);
+
 
             user.Password = null;
 

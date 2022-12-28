@@ -1,6 +1,7 @@
 ﻿
 using AdminPortal.Models;
 using MessageBoardClassLibrary.MessageBoardContext;
+using MessageBoardClassLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AdminPortal.Controllers
@@ -22,6 +23,25 @@ namespace AdminPortal.Controllers
         public IActionResult PostPage()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult SubmitPost(ICollection<IFormFile> files, PostViewModel Post)
+        {
+            Post.DatePosted = DateTime.Now;
+            Post.Media = new List<Media>();
+
+            string savePath = Path.Combine(Directory.GetCurrentDirectory(),"UploadedImages");
+            string MediaId;
+            foreach(IFormFile file in files)
+            {
+                MediaId = Guid.NewGuid().ToString();
+                Stream stream = new FileStream(Path.Combine(savePath, MediaId + Path.GetExtension(file.FileName)), FileMode.Create);
+                file.CopyTo(stream);
+                Post.Media.Add(new() { Id = MediaId, Name = file.FileName, Type = file.ContentType});
+            }
+
+            return View("PostPage");
         }
     }
 }

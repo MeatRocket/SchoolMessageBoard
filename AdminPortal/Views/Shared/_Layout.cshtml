@@ -22,12 +22,6 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Register">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignIn">SignIn</a>
-                        </li>
                         @if (HttpContextAccessor.HttpContext.Session.GetString("UserSession") != null && HttpContextAccessor.HttpContext.Session.GetString("UserSession") != "")
                         {
                             @if (HttpContextAccessor.HttpContext.Session.GetString("UserRole") == "Admin")
@@ -38,7 +32,25 @@
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="ManageSchools">Manage Schools</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="ManagePosts">Manage Posts</a>
+                                </li>
                             }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="PostPage">Post</a>
+                            </li>
+                            <li class="nav-item _userBox">
+                                <a class="nav-link disabled text-dark">Welcome @HttpContextAccessor.HttpContext.Session.GetString("UserName")</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignIn">SignIn</a>
+                            </li>
                         }
                     </ul>
                 </div>

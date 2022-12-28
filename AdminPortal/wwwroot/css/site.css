@@ -53,6 +53,9 @@ ul {
     align-self: center;
 }
 
+._userBox{
+    margin-left: auto;
+}
 
 @keyframes spin {
     100% {

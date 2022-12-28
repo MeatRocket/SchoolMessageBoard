@@ -4,6 +4,7 @@ using MessageBoardClassLibrary.MessageBoardContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MessageBoardClassLibrary.Migrations
 {
     [DbContext(typeof(BoardContext))]
-    partial class BoardContextModelSnapshot : ModelSnapshot
+    [Migration("20221228102550_MediaMigration")]
+    partial class MediaMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,6 +106,7 @@ namespace MessageBoardClassLibrary.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsValid")
+                        .HasMaxLength(200)
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsVisible")

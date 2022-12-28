@@ -15,7 +15,7 @@ using Microsoft.Data.SqlClient;
 
 namespace AdminPortal.Controllers
 {
-    [AuthFilter]
+    [AdminAuthFilter]
     public class AdminController : Controller
     {
         private readonly ILogger<HomeController> _logger;

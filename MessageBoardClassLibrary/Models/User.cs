@@ -11,13 +11,13 @@ namespace MessageBoardClassLibrary.Models
         public string Id { get; set; }
 
         [Required]
-        public bool IsValidated { get; set; }
+        public bool IsValidated { get; set; } = false;
 
         [Required]
         public bool IsVisible { get; set; } = true;
 
         [Required]
-        public bool IsActivated { get; set; }
+        public bool IsActivated { get; set; } = false;
 
         [Required]
         [MaxLength(200)]

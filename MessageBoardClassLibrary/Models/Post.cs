@@ -19,7 +19,6 @@ namespace MessageBoardClassLibrary.Models
         public string UserId { get; set; }
 
         [Required]
-        [MaxLength(200)]
         public bool IsValid { get; set; } = false;
 
         [Required]

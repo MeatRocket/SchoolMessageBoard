@@ -4,11 +4,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace AdminPortal.Models;
 
-public class AuthFilter : Attribute, IAuthorizationFilter
+public class AdminAuthFilter : Attribute, IAuthorizationFilter
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {
-        if (context.HttpContext.Session.GetString("UserSession").IsNullOrEmpty())
+        if (context.HttpContext.Session.GetString("UserSession").IsNullOrEmpty() || context.HttpContext.Session.GetString("UserRole") != "Admin")
             context.Result = new StatusCodeResult(StatusCodes.Status401Unauthorized);
     }
 }

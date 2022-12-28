@@ -16,16 +16,16 @@ namespace MessageBoardClassLibrary.Models
 
         [Required]
         [MaxLength(200)]
-        public string PostId { get; set; }
-        public Post Post { get; set; }
-
-        [Required]
-        [MaxLength(200)]
-        public string Title { get; set; }
+        public string Type { get; set; }
 
         [Required]
         [MaxLength(200)]
         public string Name { get; set; }
+
+        [Required]
+        [MaxLength(200)]
+        public string PostId { get; set; }
+        public Post Post { get; set; }
 
     }
 }
