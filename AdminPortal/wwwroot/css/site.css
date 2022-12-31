@@ -23,7 +23,8 @@ body {
 
 ._invisible {
     visibility: hidden;
- }
+}
+
 ._checkboxContainer {
     display: flex;
     flex-wrap: wrap;
@@ -31,14 +32,15 @@ body {
 }
 
 ul {
-
 }
+
 ._checkBoxPadding {
     display: flex;
     flex-direction: column;
     justify-content: center;
     height: 78px;
 }
+
 ._formSelector {
     height: max-content;
 }
@@ -47,13 +49,17 @@ ul {
     text-decoration: none;
     color: #212529;
 }
+
 ._checkbox {
 }
+
 ._validatinCheckbox {
     align-self: center;
 }
 
-._userBox{
+._userBox {
+    display: flex;
+    flex-direction: row;
     margin-left: auto;
 }
 
@@ -62,3 +68,22 @@ ul {
         transform: rotate(360deg);
     }
 }
+
+._imageContainer {
+    display: flex;
+}
+
+._imageComponent {
+    box-shadow: 1px 10px 5px 1px rgba(0,0,0,0.15);
+    margin: 20px;
+}
+
+.hovered-element {
+    transition: transform 0.5s, box-shadow 0.5s;
+    ;
+}
+
+    .hovered-element:hover {
+        transform: scale(1.1);
+        box-shadow: 2px 20px 10px 2px rgba(0,0,0,0.25);
+    }

@@ -42,7 +42,7 @@ namespace MessageBoardClassLibrary.Models
         [Required]
         [MaxLength(100)]
         public string Role { get; set; }
-        public virtual ICollection<Post> Posts { get; set; }
+        public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
         [Required]
         public virtual ICollection<SchoolUser> Schools { get; set; }

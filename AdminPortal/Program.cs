@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using MessageBoardClassLibrary.MessageBoardContext;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.DependencyInjection;
+using NuGet.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<BoardContext>();
 builder.Services.AddSession();
 builder.Services.AddHttpContextAccessor();
+
 
 var app = builder.Build();
 

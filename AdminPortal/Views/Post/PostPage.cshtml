@@ -1,25 +1,27 @@
 ﻿@{
-    ViewData["Title"] = "Create a Post";
+    ViewData["Title"] = "Choose a Template";
 }
+<h1 class="text-center">Please Choose a Template</h1>
+<hr />
+<br />
+<div class="_imageContainer">
+    <div class="_imageComponent hovered-element ">
+        <a href="@Url.Action("PostPage", new { Template = "PostTemplate1" })">
 
-<h1> This is the post page</h1>
+            <img src="~/imgs/Template1.png" class="img-fluid" />
+        </a>
 
-<form enctype="multipart/form-data" asp-action="SubmitPost" method="post">
-    <div class="col">
-        <label class="sr-only">Title</label>
-        <input class="form-control" type="text" alt="Post Title" placeholder="PostTitle" name="Title" />
     </div>
-
-    <div class="col">
-        <label class="sr-only">Description</label>
-        <textarea class="form-control" aria-label="With textarea" name="Description"></textarea>
+    <div class="_imageComponent hovered-element ">
+        <a href="@Url.Action("PostPage", new { Template = "PostTemplate2" })">
+            <img src="~/imgs/Template2.png" class="img-fluid" />
+        </a>
     </div>
-    <div class="col">
-        <label class="sr-only">Upload Media</label>
-        <input type="file" class="form-control" aria-label="With textarea" name="files" multiple/>
-    </div>
-    <br />
-    <button class="btn btn-primary mb-2"> Upload </button>
-</form>
+    <div class="_imageComponent hovered-element ">
+        <a href="@Url.Action("PostPage", new { Template = "PostTemplate3" })">
 
-<script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+            <img src="~/imgs/Template3.png" class="img-fluid" />
+        </a>
+
+    </div>
+</div>

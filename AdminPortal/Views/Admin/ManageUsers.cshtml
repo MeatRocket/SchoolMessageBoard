@@ -28,6 +28,7 @@
             <th>School</th>
             <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "valid", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Is Valid</a></th>
             <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "active", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Is Active</a></th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "postCount", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Posts</a></th>
             <th></th>
             <th></th>
         </tr>
@@ -50,6 +51,15 @@
 
                 <td>@user.IsValidated</td>
                 <td>@user.IsActivated</td>
+                @if(@user.Posts != null)
+                {
+                       <td> @user.Posts.Count </td>
+
+                }
+                else
+                {   
+                        <td> 0 </td>
+                }
                 <td><a class="btn btn-primary" href="@Url.Action("EditUser",new{Id = user.Id}) ">Edit</a></td>
                 <td><button class="btn btn-danger" onclick="ShowPopup('@user.Id')">Delete</button></td>
             </tr>

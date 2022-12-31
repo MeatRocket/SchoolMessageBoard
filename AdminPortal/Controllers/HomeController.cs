@@ -31,6 +31,13 @@ namespace AdminPortal.Controllers
             return View();
         }
 
+        public IActionResult LogOut()
+        {
+            _accessor.HttpContext.Session.Clear();
+
+            return RedirectToAction("SignIn", new UserViewModel());
+        }
+
         public IActionResult Privacy()
         {
             return View();
@@ -117,7 +124,7 @@ namespace AdminPortal.Controllers
 
                 _context.AddRange(SchoolUsers);
 
-                _accessor.HttpContext.Session.SetString("UserId", user.Id);
+                _accessor.HttpContext.Session.SetString("UserSession", user.Id);
                 _context.SaveChanges();
 
                 return View("HomePage", user.MapToUserViewModel().FirstName);

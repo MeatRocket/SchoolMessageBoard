@@ -245,7 +245,49 @@ namespace AdminPortal.Controllers
 
             return View(Admin);
         }
+        [HttpGet]
+        public IActionResult ManagePosts(string sortField, string sortOrder, string searchString)
+        {
 
+            return View();
+            if (!searchString.IsNullOrEmpty())
+            {
+                Admin.Schools = _context.Schools.Include(x => x.Area.Field).Where(x => x.Name.Contains(searchString)).OrderBy(x => x.Name).ToList();
+                return View(Admin);
+            }
+
+            ViewBag.SortOrder = "";
+            if (sortOrder.IsNullOrEmpty())
+                ViewBag.SortOrder = "asc";
+
+            Admin.Schools = _context.Schools.Include(x => x.Area.Field).ToList();
+
+            switch (sortField)
+            {
+                case ("fieldName"):
+                    if (ViewBag.SortOrder == "asc")
+                        Admin.Schools = Admin.Schools.OrderBy(x => x.Area.Field.Name).ToList();
+                    else
+                        Admin.Schools = Admin.Schools.OrderByDescending(x => x.Area.Field.Name).ToList();
+                    break;
+
+                case ("areaName"):
+                    if (ViewBag.SortOrder == "asc")
+                        Admin.Schools = Admin.Schools.OrderBy(x => x.Area.Name).ToList();
+                    else
+                        Admin.Schools = Admin.Schools.OrderByDescending(x => x.Area.Name).ToList();
+                    break;
+
+                default:
+                    if (ViewBag.SortOrder == "asc")
+                        Admin.Schools = Admin.Schools.OrderBy(x => x.Name).ToList();
+                    else
+                        Admin.Schools = Admin.Schools.OrderByDescending(x => x.Name).ToList();
+                    break;
+            }
+
+            return View(Admin);
+        }
         [HttpPost]
         public IActionResult EditSchool(AdminViewModel adminViewModel)
         {

@@ -22,7 +22,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (HttpContextAccessor.HttpContext.Session.GetString("UserSession") != null && HttpContextAccessor.HttpContext.Session.GetString("UserSession") != "")
+                        @if (!string.IsNullOrEmpty(HttpContextAccessor.HttpContext.Session.GetString("UserSession")))
                         {
                             @if (HttpContextAccessor.HttpContext.Session.GetString("UserRole") == "Admin")
                             {
@@ -41,6 +41,7 @@
                             </li>
                             <li class="nav-item _userBox">
                                 <a class="nav-link disabled text-dark">Welcome @HttpContextAccessor.HttpContext.Session.GetString("UserName")</a>
+                                <a href=@Url.Action("Logout") class="nav-link text-dark">Logout</a>
                             </li>
                         }
                         else
