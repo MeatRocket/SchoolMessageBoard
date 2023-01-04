@@ -2,6 +2,59 @@
     ViewData["Title"] = "Home Page";
 }
 
+@model List<PostViewModel>
+
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
 </div>
+
+<div class="text-left">
+    <h1 class="display-4">Latest Posts</h1>
+    <hr />
+</div>
+@if (Model != null)
+{
+    <div id="carouselExampleCaptions" class="carousel slide carousel-dark">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="fixed-ratio-resize">
+                    <img src="./UploadedFiles/@Model.First().Media.First().Id" class="d-block w-100" alt="@Model.First().Media.First().Name">
+                </div>
+                <div class="carousel-caption d-md-block _opaque-background">
+                    <div class="_captionContent">
+                        <h5>@Model.First().Title</h5>
+                        <div class="_ellipsis">
+                            @Model.First().Description
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (Model.Count > 1)
+            {
+                @foreach (PostViewModel postViewModel in Model.Skip(1).ToList())
+                {
+                    <div class="carousel-item">
+                        <div class="fixed-ratio-resize">
+                            <img src="./UploadedFiles/@postViewModel.Media.First().Id" class="d-block w-100" alt="@postViewModel.Media.First().Name">
+                        </div>
+                        <div class="carousel-caption d-md-block _opaque-background">
+                            <h5>@postViewModel.Title</h5>
+                            <div class="_ellipsis">
+                                @postViewModel.Description
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+}

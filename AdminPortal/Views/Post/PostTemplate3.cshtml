@@ -6,6 +6,15 @@
 <h1>Create a New Post Template 3</h1>
 
 <form class="was-validated" enctype="multipart/form-data" asp-action="SubmitPost" method="post">
+    <input type="hidden" value="PostTemplate3" name="templatePage" />
+    <br />
+
+    <div class="col">
+        <label class="sr-only">Upload Media</label>
+        <br />
+        <input type="file" class="_uploadFile" aria-label="With textarea" name="files" multiple />
+    </div>
+    <br />
     <div class="custom-control col">
         <label class="sr-only">Title</label>
         <input class="form-control custom-control-input" type="text" alt="Post Title" placeholder="PostTitle" name="Title" required />
@@ -18,12 +27,9 @@
         <div class="invalid-feedback">Description is Requiered !</div>
 
     </div>
-    <div class="row">
-        <div class="col">
-            <label class="sr-only">Upload Media</label>
-            <br />
-            <input type="file" class="_uploadFile" aria-label="With textarea" name="files" multiple />
-        </div>
+    <br />
+
+    <div class="col">
         <div class="form-group col _errorMessages">
             <ul class="_errorList text-danger">
                 @foreach (var errorMessage in Model.ErrorMessages)
@@ -34,8 +40,6 @@
         </div>
     </div>
 
-
-    <br />
     <div class="col">
         <button class="btn btn-primary mb-2"> Upload </button>
     </div>

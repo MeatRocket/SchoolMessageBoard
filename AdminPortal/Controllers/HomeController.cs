@@ -26,9 +26,15 @@ namespace AdminPortal.Controllers
             _accessor = httpContextAccessor;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(List<PostViewModel> RecentPosts)
         {
-            return View();
+            if(RecentPosts == null || RecentPosts.Count == 0)
+                RecentPosts = _context.Posts.Include(x => x.Media).OrderByDescending(x => x.DatePosted).Take(3).ToList().Select(x => x.MapToPostView()).ToList();
+
+            if (RecentPosts.Count == 0)
+                RecentPosts = null;
+
+            return View(RecentPosts);
         }
 
         public IActionResult LogOut()
@@ -81,7 +87,7 @@ namespace AdminPortal.Controllers
 
             user.Password = null;
 
-            return View("Index");
+            return RedirectToAction("Index");
         }
         [HttpGet]
         public IActionResult HomePage(string firstname)

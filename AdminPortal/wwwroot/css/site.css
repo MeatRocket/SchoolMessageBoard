@@ -80,7 +80,26 @@ ul {
 
 .hovered-element {
     transition: transform 0.5s, box-shadow 0.5s;
-    ;
+}
+
+._ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fixed-ratio-resize {
+    height: 100vh;
+}
+._opaque-background {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+}
+._captionContent{
+    margin: 10px;
+}
+.fixed-ratio-resize img {
+    height: inherit;
 }
 
     .hovered-element:hover {

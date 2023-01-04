@@ -32,6 +32,10 @@ namespace MessageBoardClassLibrary.Models
 
         [Required]
         [MaxLength(200)]
+        public string Template { get; set; }
+
+        [Required]
+        [MaxLength(200)]
         public string Title { get; set; }
         [Required]
         public string Description { get; set; }

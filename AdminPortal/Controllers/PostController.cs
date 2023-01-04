@@ -23,12 +23,12 @@ namespace AdminPortal.Controllers
         }
 
         public IActionResult PostPage(string Template)
-        
+       
         {
             if (Template.IsNullOrEmpty())
                 return View();
 
-            return View(Template);
+            return View(Template, new PostViewModel());
         }
 
         [HttpPost]
@@ -44,18 +44,23 @@ namespace AdminPortal.Controllers
             }
 
             postViewModel.DatePosted = DateTime.Now;
-            postViewModel.Media = new List<Media>();
             postViewModel.ErrorMessages.Clear();
+            postViewModel.Template = templatePage;
 
-            if (postViewModel.files.FirstOrDefault(x => x.ContentType.Split("/")[0].Equals("Image", StringComparison.OrdinalIgnoreCase) || x.ContentType.Split("/")[0].Equals("Video", StringComparison.OrdinalIgnoreCase)) == null)
+            if (postViewModel.files != null)
             {
-                postViewModel.ErrorMessages.Add("Please Upload Videos and Images Only");
-                return RedirectToAction(templatePage, postViewModel);
+                postViewModel.Media = new List<Media>();
+                if (postViewModel.files.FirstOrDefault(x => !x.ContentType.Split("/")[0].Equals("Image", StringComparison.OrdinalIgnoreCase) && !x.ContentType.Split("/")[0].Equals("Video", StringComparison.OrdinalIgnoreCase)) != null)
+                {
+                    postViewModel.ErrorMessages.Add("Please Upload Videos and Images Only");
+                    return RedirectToAction(templatePage, postViewModel);
+                }
+
+                postViewModel.Media = GetMedia(postViewModel.files);
             }
-
-            postViewModel.Media = GetMedia(postViewModel.files);
-
+            
             User User = _context.Users.FirstOrDefault(x => x.Id == _accessor.HttpContext.Session.GetString("UserSession"));
+            
             User.Posts = new List<Post>
             {
                 postViewModel.MapToPost()
@@ -67,17 +72,32 @@ namespace AdminPortal.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult PostTemplate1(PostViewModel postViewModel)
+        {
+            return View(postViewModel);
+        }
+
+        public IActionResult PostTemplate2(PostViewModel postViewModel)
+        {
+            return View(postViewModel);
+        }
+
+        public IActionResult PostTemplate3(PostViewModel postViewModel)
+        {
+            return View(postViewModel);
+        }
+
         public List<Media> GetMedia(ICollection<IFormFile> formFiles)
         {
             List<Media> mediaList = new List<Media>();
             PostViewModel postViewModel = new();
-            string savePath = Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles");
+            string savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/UploadedFiles");
             string MediaId;
 
             foreach (IFormFile file in formFiles)
             {
-                MediaId = Guid.NewGuid().ToString();
-                Stream stream = new FileStream(Path.Combine(savePath, MediaId + Path.GetExtension(file.FileName)), FileMode.Create);
+                MediaId = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                Stream stream = new FileStream(Path.Combine(savePath, MediaId) , FileMode.Create);
                 file.CopyTo(stream);
                 mediaList.Add(new() { Id = MediaId, Name = file.FileName, Type = file.ContentType });
             }

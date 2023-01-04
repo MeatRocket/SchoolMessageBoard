@@ -4,8 +4,8 @@
 @model PostViewModel
 
 <h1>Create a New Post Template 1</h1>
-
 <form class="was-validated" enctype="multipart/form-data" asp-action="SubmitPost" method="post">
+<input type="hidden" value="PostTemplate1" name="templatePage" />
     <div class="custom-control col">
         <label class="sr-only">Title</label>
         <input class="form-control custom-control-input" type="text" alt="Post Title" placeholder="PostTitle" name="Title" required />

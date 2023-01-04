@@ -4,3 +4,5 @@
 window.addEventListener('beforeunload', function (event) {
     document.querySelector('.loading').style.display = 'flex';
 });
+
+
