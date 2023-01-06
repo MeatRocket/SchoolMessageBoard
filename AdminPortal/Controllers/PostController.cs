@@ -144,7 +144,7 @@ namespace AdminPortal.Controllers
 
             var y = body.Result.Substring(0, body.Result.IndexOf("&__RequestVerificationToken")).Split("&").Select(z => z.Replace("+", " ")).ToList();
             //if count of substring is less than the property count  throw error
-
+            
             string TemplateName = y[0].Split("=")[1];
 
             for (int i=1; i<y.Count; i++)
