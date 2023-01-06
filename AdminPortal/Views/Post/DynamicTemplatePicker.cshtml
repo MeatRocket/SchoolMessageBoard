@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Choose a Template";
+}
+
+@model List<string>
+
+<h1 class="text-center">Please Choose a Template</h1>
+<hr />
+<br />
+
+<form asp-action="DynamicTemplateEditor" method="get">
+    <select class="form-control " required name="TemplateName">
+        <option value="" selected>Chose a Template</option>
+        @foreach (string Template in Model)
+        {
+            <option value="@Template">@Template</option>
+        }
+    </select>
+
+    <div class="col">
+        <button class="btn btn-primary mb-2"> go </button>
+    </div>
+</form>

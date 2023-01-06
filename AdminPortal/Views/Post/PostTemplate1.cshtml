@@ -1,7 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Create a Post";
 }
-@model PostViewModel
 
 <h1>Create a New Post Template 1</h1>
 <form class="was-validated" enctype="multipart/form-data" asp-action="SubmitPost" method="post">
@@ -16,8 +15,8 @@
         <label class="sr-only">Description</label>
         <textarea class="form-control custom-control-input" aria-label="With textarea" name="Description" required></textarea>
         <div class="invalid-feedback">Description is Requiered !</div>
-
     </div>
+
     <div class="row">
         <div class="col">
             <label class="sr-only">Upload Media</label>

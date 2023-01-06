@@ -23,7 +23,7 @@ namespace AdminPortal.Controllers
         }
 
         public IActionResult PostPage(string Template)
-       
+
         {
             if (Template.IsNullOrEmpty())
                 return View();
@@ -58,9 +58,9 @@ namespace AdminPortal.Controllers
 
                 postViewModel.Media = GetMedia(postViewModel.files);
             }
-            
+
             User User = _context.Users.FirstOrDefault(x => x.Id == _accessor.HttpContext.Session.GetString("UserSession"));
-            
+
             User.Posts = new List<Post>
             {
                 postViewModel.MapToPost()
@@ -87,6 +87,77 @@ namespace AdminPortal.Controllers
             return View(postViewModel);
         }
 
+        public IActionResult DynamicSubmitPostView()
+        {
+            return View();
+        }
+
+        public IActionResult DynamicSubmitPost(Template template)
+        {
+            template.Id = Guid.NewGuid().ToString();
+            List<Template> Templates = _context.TemplateDetails.ToList();
+
+            if (Templates.Count > 0)
+            {
+                if (Templates.FirstOrDefault(x => x.PopertyName == template.PopertyName) != null)
+                {
+                    ModelState.AddModelError("UniquePropNameError", "Property Name Must Be Unique For Each Template Name!");
+                    return View("DynamicSubmitPostView");
+                }
+            }
+
+            _context.TemplateDetails.Add(template);
+            _context.SaveChanges();
+
+            return View("DynamicSubmitPostView");
+        }
+
+        public IActionResult DynamicPostView(string templateName)
+        {
+            List <Template> Templates = _context.TemplateDetails.OrderBy(x => x.PopertySequence).ToList().Where(x => x.Name.Equals(templateName, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            return View(Templates);
+        }
+
+        public IActionResult DynamicTemplatePicker()
+        {
+            List<Template> Templates = _context.TemplateDetails.ToList().DistinctBy(x => x.Name).ToList();
+            List<string> TemplateNames = Templates.Select(x => x.Name).ToList();
+
+            return View(TemplateNames);
+        }
+
+        [HttpGet]
+        public IActionResult DynamicTemplateEditor(string TemplateName)
+        {
+            List<Template> Templates = _context.TemplateDetails.Where(x => x.Name == TemplateName).ToList();
+
+            return View(Templates);
+        }
+
+        [HttpPost]
+        public async Task <IActionResult> DynamicTemplateEditor()
+        {
+            var x = HttpContext.Request.Body;
+            var reader = new StreamReader(x);
+            var body = reader.ReadToEndAsync();
+
+            var y = body.Result.Substring(0, body.Result.IndexOf("&__RequestVerificationToken")).Split("&").Select(z => z.Replace("+", " ")).ToList();
+            //if count of substring is less than the property count  throw error
+
+            string TemplateName = y[0].Split("=")[1];
+
+            for (int i=1; i<y.Count; i++)
+            {
+                string[] KeyValuePairs = y[i].Split("=");
+                _context.TemplateDetails.Where(x => x.Name  == TemplateName).ToList().First(x => x.PopertyName == KeyValuePairs[0]).PopertyValue = KeyValuePairs[1];
+            }
+            _context.SaveChanges();
+            //var y = HttpContext.Request.BodyReader;
+            return RedirectToAction("DynamicPostView", new{ templateName = TemplateName });
+        }
+
+
         public List<Media> GetMedia(ICollection<IFormFile> formFiles)
         {
             List<Media> mediaList = new List<Media>();
@@ -97,7 +168,7 @@ namespace AdminPortal.Controllers
             foreach (IFormFile file in formFiles)
             {
                 MediaId = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                Stream stream = new FileStream(Path.Combine(savePath, MediaId) , FileMode.Create);
+                Stream stream = new FileStream(Path.Combine(savePath, MediaId), FileMode.Create);
                 file.CopyTo(stream);
                 mediaList.Add(new() { Id = MediaId, Name = file.FileName, Type = file.ContentType });
             }

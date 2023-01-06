@@ -39,9 +39,12 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="PostPage">Post</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="DynamicTemplatePicker">Dynamic Post Editor</a>
+                            </li>
                             <li class="nav-item _userBox">
                                 <a class="nav-link disabled text-dark">Welcome @HttpContextAccessor.HttpContext.Session.GetString("UserName")</a>
-                                <a href=@Url.Action("Logout") class="nav-link text-dark">Logout</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
                             </li>
                         }
                         else
@@ -53,6 +56,12 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SignIn">SignIn</a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="DynamicPostView" asp-route-templateName="Template1">Dynamic Post</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Post" asp-action="DynamicSubmitPostView" asp-route-templateName="Template1">Dynamic Template Post</a>
+                        </li>
                     </ul>
                 </div>
             </div>

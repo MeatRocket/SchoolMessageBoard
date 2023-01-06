@@ -18,6 +18,8 @@ namespace MessageBoardClassLibrary.MessageBoardContext
         public DbSet<School> Schools { get; set; }
         public DbSet<SchoolUser> SchoolUsers { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Template> TemplateDetails { get; set; }
+
 
         override
         protected void OnModelCreating(ModelBuilder modelBuilder)

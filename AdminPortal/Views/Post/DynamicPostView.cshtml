@@ -1,0 +1,76 @@
+﻿@using MessageBoardClassLibrary.Models;
+@{
+    ViewData["Title"] = "DPV";
+}
+
+@model List<Template>
+
+<input name="templateName" type="hidden" value="@Model.First().Name" />
+<div class="col">
+    @for (int i = 0; i < Model.Count; i++)
+    {
+        <div class="row">
+            @for (int j = i + 1; j < Model.Count; j++)
+            {
+                    @switch (Model[i].PopertyType)
+                    {
+                        case "Title":
+                            <div class="col-2">
+                                <h2>
+                                    @Model[i].PopertyValue
+                                </h2>
+                            </div>
+
+                            break;
+
+                        case "Description":
+                            <div class="col-10">
+                                <p>
+                                    @Model[i].PopertyValue
+                                </p>
+                            </div>
+
+                            break;
+
+                        default:
+                            break;
+
+                    }
+                @if (Model[i].PopertySequence != Model[j].PopertySequence)
+                    break;
+
+                i++;
+            }
+
+            @if (i + 1 == Model.Count)
+            {
+                @switch (Model[i].PopertyType)
+                {
+                    case "Title":
+                        <div class="col-2">
+                            <h2>
+                                @Model[i].PopertyValue
+                            </h2>
+                        </div>
+
+                        break;
+
+                    case "Description":
+                        <div class="col-10">
+                            <p>
+                                @Model[i].PopertyValue
+                            </p>
+                        </div>
+
+                        break;
+
+                    default:
+                        break;
+
+                }
+            }
+        </div>
+        <hr />
+        <br />
+    }
+</div>
