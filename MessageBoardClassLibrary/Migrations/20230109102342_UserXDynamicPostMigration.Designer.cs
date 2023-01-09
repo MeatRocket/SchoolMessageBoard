@@ -4,6 +4,7 @@ using MessageBoardClassLibrary.MessageBoardContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MessageBoardClassLibrary.Migrations
 {
     [DbContext(typeof(BoardContext))]
-    partial class BoardContextModelSnapshot : ModelSnapshot
+    [Migration("20230109102342_UserXDynamicPostMigration")]
+    partial class UserXDynamicPostMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -341,7 +344,7 @@ namespace MessageBoardClassLibrary.Migrations
             modelBuilder.Entity("MessageBoardClassLibrary.Models.Template", b =>
                 {
                     b.HasOne("MessageBoardClassLibrary.Models.User", null)
-                        .WithMany("TemplateDetails")
+                        .WithMany("DynamicPosts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -376,11 +379,11 @@ namespace MessageBoardClassLibrary.Migrations
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.User", b =>
                 {
+                    b.Navigation("DynamicPosts");
+
                     b.Navigation("Posts");
 
                     b.Navigation("Schools");
-
-                    b.Navigation("TemplateDetails");
                 });
 #pragma warning restore 612, 618
         }

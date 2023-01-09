@@ -44,6 +44,8 @@ namespace MessageBoardClassLibrary.Models
         public string Role { get; set; }
         public virtual ICollection<Post> Posts { get; set; } = new List<Post>();
 
+        public virtual ICollection<Template> TemplateDetails { get; set; } = new List<Template>();
+
         [Required]
         public virtual ICollection<SchoolUser> Schools { get; set; }
 

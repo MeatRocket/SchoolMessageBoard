@@ -24,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\DynamicUploadedFiles\" />
     <Folder Include="wwwroot\UploadedFiles\" />
   </ItemGroup>
 

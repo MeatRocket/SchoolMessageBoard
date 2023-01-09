@@ -1,10 +1,15 @@
 ﻿
 using AdminPortal.Models;
 using MessageBoardClassLibrary.MessageBoardContext;
+using MessageBoardClassLibrary.Migrations;
 using MessageBoardClassLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
+using NuGet.Packaging;
+using System.Collections.Generic;
+using System.Security;
+using System.Text;
 
 namespace AdminPortal.Controllers
 {
@@ -59,7 +64,7 @@ namespace AdminPortal.Controllers
                 postViewModel.Media = GetMedia(postViewModel.files);
             }
 
-            User User = _context.Users.FirstOrDefault(x => x.Id == _accessor.HttpContext.Session.GetString("UserSession"));
+            User User = _context.Users.First(x => x.Id == _accessor.HttpContext.Session.GetString("UserSession"));
 
             User.Posts = new List<Post>
             {
@@ -105,8 +110,10 @@ namespace AdminPortal.Controllers
                     return View("DynamicSubmitPostView");
                 }
             }
-
-            _context.TemplateDetails.Add(template);
+            User user = _context.Users.First(x => x.Id == _accessor.HttpContext.Session.GetString("UserSession"));
+            //_context.TemplateDetails.Add(template);
+            user.TemplateDetails.Add(template);
+            _context.Update(user);
             _context.SaveChanges();
 
             return View("DynamicSubmitPostView");
@@ -114,7 +121,7 @@ namespace AdminPortal.Controllers
 
         public IActionResult DynamicPostView(string templateName)
         {
-            List <Template> Templates = _context.TemplateDetails.OrderBy(x => x.PopertySequence).ToList().Where(x => x.Name.Equals(templateName, StringComparison.OrdinalIgnoreCase)).ToList();
+            List<Template> Templates = _context.TemplateDetails.OrderBy(x => x.PopertySequence).ToList().Where(x => x.Name.Equals(templateName, StringComparison.OrdinalIgnoreCase)).ToList();
 
             return View(Templates);
         }
@@ -136,28 +143,45 @@ namespace AdminPortal.Controllers
         }
 
         [HttpPost]
-        public async Task <IActionResult> DynamicTemplateEditor()
+        public async Task<IActionResult> DynamicTemplateEditor(IFormCollection formColletion)
         {
-            var x = HttpContext.Request.Body;
-            var reader = new StreamReader(x);
-            var body = reader.ReadToEndAsync();
+            var changedTemplates = formColletion.ToList();
+            string TemplateName = changedTemplates[0].Value;
+            List<Template> TemplateComponents = _context.TemplateDetails.Where(x => x.Name == TemplateName).ToList();
 
-            var y = body.Result.Substring(0, body.Result.IndexOf("&__RequestVerificationToken")).Split("&").Select(z => z.Replace("+", " ")).ToList();
-            //if count of substring is less than the property count  throw error
-            
-            string TemplateName = y[0].Split("=")[1];
-
-            for (int i=1; i<y.Count; i++)
+            for (int i = 1; i < changedTemplates.Count - 1; i++)
             {
-                string[] KeyValuePairs = y[i].Split("=");
-                _context.TemplateDetails.Where(x => x.Name  == TemplateName).ToList().First(x => x.PopertyName == KeyValuePairs[0]).PopertyValue = KeyValuePairs[1];
+                var KeyValuePairs = changedTemplates[i];
+                if (TemplateComponents.First(x => x.PopertyName == KeyValuePairs.Key) != null && TemplateComponents.First(x => x.PopertyName == KeyValuePairs.Key).PopertyType == "Media")
+                {
+                    TemplateComponents.First(x => x.PopertyName == KeyValuePairs.Key).PopertyValue = GetDynamicMediaFiles(KeyValuePairs.Value);
+                }
+                else
+                    TemplateComponents.First(x => x.PopertyName == KeyValuePairs.Key).PopertyValue = KeyValuePairs.Value;
             }
+
+            _context.Users.First(x => x.Id == _accessor.HttpContext.Session.GetString("UserSession")).TemplateDetails.AddRange(TemplateComponents);
             _context.SaveChanges();
-            //var y = HttpContext.Request.BodyReader;
-            return RedirectToAction("DynamicPostView", new{ templateName = TemplateName });
+            return RedirectToAction("DynamicPostView", new { templateName = TemplateName });
         }
 
+        public string GetDynamicMediaFiles(Microsoft.Extensions.Primitives.StringValues files)
+        {
+            List<string> Files = new();
+            string savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/DynamicUploadedFiles");
+            string MediaId;
 
+
+            foreach (string fileName in files)
+            {
+                MediaId = Guid.NewGuid().ToString() + Path.GetExtension(fileName);
+                Files.Add(MediaId);
+                Stream stream = new FileStream(Path.Combine(savePath, MediaId), FileMode.Create);
+                stream.CopyTo(stream);
+            }
+
+            return string.Join(" ", Files);
+        }
         public List<Media> GetMedia(ICollection<IFormFile> formFiles)
         {
             List<Media> mediaList = new List<Media>();

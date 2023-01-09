@@ -30,5 +30,8 @@ namespace MessageBoardClassLibrary.Models
         [Required(ErrorMessage = "Please enter Property Sequence")]
         [MaxLength(200)]
         public string PopertySequence { get; set; }
+
+        [MaxLength(200)]
+        public string UserId { get; set; }
     }
 }

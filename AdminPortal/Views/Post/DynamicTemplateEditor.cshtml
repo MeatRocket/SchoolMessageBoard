@@ -31,6 +31,15 @@
 
                             break;
 
+                        case "Media":
+                            <div class="col-10">
+                                <label> @Model[i].PopertyName</label>
+                                <br />
+                                <input type="file" class="_uploadFile" aria-label="With textarea" name="@Model[i].PopertyName" multiple />
+                            </div>
+
+                            break;
+
                         default:
                             break;
 
@@ -59,6 +68,14 @@
                                 <textarea name="@Model[i].PopertyName" required></textarea>
                             </div>
 
+                            break;
+
+                        case "Media":
+                            <div class="col-10">
+                                <label> @Model[i].PopertyName</label>
+                                <br />
+                                <input type="file" class="_uploadFile" aria-label="With textarea" name="@Model[i].PopertyName" multiple />
+                            </div>
                             break;
 
                         default:
