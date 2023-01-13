@@ -1,0 +1,95 @@
+﻿@using MessageBoardClassLibrary.Models;
+@{
+    ViewData["Title"] = "Create Post";
+}
+
+@model Template
+
+<form enctype="multipart/form-data" asp-action="DynamicPostEditor" method="post">
+    <input name="templateName" type="hidden" value="@Model.TemplateName" />
+    <div class="col">
+        @for (int i = 0; i < Model.DynamicProperties.Count; i++)
+        {
+            <div class="row">
+                @for (int j = i + 1; j < Model.DynamicProperties.Count; j++)
+                {
+                    @switch (Model.DynamicProperties[i].Type)
+                    {
+                        case "Title":
+                            <div class="col-2">
+                                <label> @Model.DynamicProperties[i].PropertyName</label>
+                                <input type="text" name="@Model.DynamicProperties[i].PropertyName" required />
+                            </div>
+
+                            break;
+
+                        case "Description":
+                            <div class="col-10">
+                                <label> @Model.DynamicProperties[i].PropertyName</label>
+                                <textarea name="@Model.DynamicProperties[i].PropertyName" required></textarea>
+                            </div>
+
+                            break;
+
+                        case "Media":
+                            <div class="col-10">
+                                <label> @Model.DynamicProperties[i].PropertyName</label>
+                                <br />
+                                <input type="file" class="_uploadFile" aria-label="With textarea" name="@Model.DynamicProperties[i].PropertyName" multiple />
+                            </div>
+
+                            break;
+
+                        default:
+                            break;
+
+                    }
+                    @if (Model.DynamicProperties[i].Sequence != Model.DynamicProperties[j].Sequence)
+                        break;
+
+                    i++;
+                }
+
+                @if (i + 1 == Model.DynamicProperties.Count)
+                {
+                    @switch (Model.DynamicProperties[i].Type)
+                    {
+                        case "Title":
+                            <div class="col-2">
+                                <label> @Model.DynamicProperties[i].PropertyName</label>
+                                <input type="text" name="@Model.DynamicProperties[i].PropertyName" required />
+                            </div>
+
+                            break;
+
+                        case "Description":
+                            <div class="col-10">
+                                <label> @Model.DynamicProperties[i].PropertyName</label>
+                                <textarea name="@Model.DynamicProperties[i].PropertyName" required></textarea>
+                            </div>
+
+                            break;
+
+                        case "Media":
+                            <div class="col-10">
+                                <label> @Model.DynamicProperties[i].PropertyName</label>
+                                <br />
+                                <input type="file" class="_uploadFile" aria-label="With textarea" name="@Model.DynamicProperties[i].PropertyName" multiple />
+                            </div>
+
+                            break;
+
+                        default:
+                            break;
+
+                    }
+                }
+            </div>
+            <hr />
+            <br />
+        }
+    </div>
+    <div class="col">
+        <button class="btn btn-primary mb-2"> Create </button>
+    </div>
+</form>

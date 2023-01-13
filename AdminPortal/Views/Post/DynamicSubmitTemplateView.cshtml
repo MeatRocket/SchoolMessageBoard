@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "DSPV";
+}
+@model DynamicPostViewModel
+
+<form asp-action="DynamicSubmitTemplate" enctype="multipart/form-data" method="post" id="myForm">
+    <div class="col">
+        <label class="sr-only">Template Name</label>
+        <input class="form-control" type="text" alt="Template Name" placeholder="Template Name" name="Template.TemplateName" required />
+    </div>
+    <div class="col">
+        
+        <label class="sr-only">Property Name</label>
+        <input class="form-control" type="text" alt="Property Name" placeholder="Property Name" name="DynamicMedia.PropertyName" required />
+    </div>
+    <div class="form-group col-md-2">
+        <select class="form-control " required name="DynamicMedia.Type">
+            <option value="" selected>Chose a Property</option>
+            <option value="Title">Title</option>
+            <option value="Description">Description</option>
+            <option value="Media">Media</option>
+        </select>
+    </div>
+    <div class="col">
+        <label class="sr-only">Property Sequence</label>
+        <input class="form-control" type="number" alt="Property Sequence" placeholder="Property Sequence" name="DynamicMedia.Sequence" required />
+    </div>
+    <br />
+    <div class="col">
+        <button class="btn btn-primary mb-2"> Submit </button>
+    </div>
+    <div class="form-group col _errorMessages" id="validationSummary">
+        @Html.ValidationSummary()
+    </div>
+</form>
+
+
+<script>
+    // handle the form's submit event
+    $('#myForm').submit(function () {
+        // show the validation summary
+        $('#validationSummary').show();
+    });
+</script>

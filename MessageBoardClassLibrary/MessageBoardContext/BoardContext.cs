@@ -18,8 +18,10 @@ namespace MessageBoardClassLibrary.MessageBoardContext
         public DbSet<School> Schools { get; set; }
         public DbSet<SchoolUser> SchoolUsers { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Template> TemplateDetails { get; set; }
-
+        public DbSet<DynamicPost> DynamicPosts { get; set; }
+        public DbSet<Template> DynamicTemplates { get; set; }
+        public DbSet<DynamicProperty> DynamicMedia { get; set; }
+        public DbSet<DbLog> Logs { get; set; }
 
         override
         protected void OnModelCreating(ModelBuilder modelBuilder)

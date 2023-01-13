@@ -4,6 +4,7 @@ using MessageBoardClassLibrary.MessageBoardContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MessageBoardClassLibrary.Migrations
 {
     [DbContext(typeof(BoardContext))]
-    partial class BoardContextModelSnapshot : ModelSnapshot
+    [Migration("20230110120307_test2")]
+    partial class test2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,67 +48,10 @@ namespace MessageBoardClassLibrary.Migrations
                     b.ToTable("Areas");
                 });
 
-            modelBuilder.Entity("MessageBoardClassLibrary.Models.DbLog", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ActionName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ControllerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LogLevel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TimeConsumed")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Logs");
-                });
-
-            modelBuilder.Entity("MessageBoardClassLibrary.Models.DynamicPost", b =>
+            modelBuilder.Entity("MessageBoardClassLibrary.Models.DynamicMedia", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("DatePosted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DynamicPosts");
-                });
-
-            modelBuilder.Entity("MessageBoardClassLibrary.Models.DynamicProperty", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("DynamicPostId")
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("PropertyName")
@@ -119,6 +65,7 @@ namespace MessageBoardClassLibrary.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("TemplateId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Type")
@@ -132,11 +79,36 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DynamicPostId");
-
                     b.HasIndex("TemplateId");
 
                     b.ToTable("DynamicMedia");
+                });
+
+            modelBuilder.Entity("MessageBoardClassLibrary.Models.DynamicPost", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<DateTime>("DatePosted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TemplateId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TemplateId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("DynamicPosts");
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.Field", b =>
@@ -354,28 +326,34 @@ namespace MessageBoardClassLibrary.Migrations
                     b.Navigation("Field");
                 });
 
+            modelBuilder.Entity("MessageBoardClassLibrary.Models.DynamicMedia", b =>
+                {
+                    b.HasOne("MessageBoardClassLibrary.Models.Template", "Template")
+                        .WithMany("DynamicProperties")
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Template");
+                });
+
             modelBuilder.Entity("MessageBoardClassLibrary.Models.DynamicPost", b =>
                 {
+                    b.HasOne("MessageBoardClassLibrary.Models.Template", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("MessageBoardClassLibrary.Models.User", "User")
                         .WithMany("DynamicPosts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("MessageBoardClassLibrary.Models.DynamicProperty", b =>
-                {
-                    b.HasOne("MessageBoardClassLibrary.Models.DynamicPost", null)
-                        .WithMany("DynamicProperties")
-                        .HasForeignKey("DynamicPostId");
-
-                    b.HasOne("MessageBoardClassLibrary.Models.Template", "Template")
-                        .WithMany("DynamicProperties")
-                        .HasForeignKey("TemplateId");
-
                     b.Navigation("Template");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.Media", b =>
@@ -440,11 +418,6 @@ namespace MessageBoardClassLibrary.Migrations
             modelBuilder.Entity("MessageBoardClassLibrary.Models.Area", b =>
                 {
                     b.Navigation("Schools");
-                });
-
-            modelBuilder.Entity("MessageBoardClassLibrary.Models.DynamicPost", b =>
-                {
-                    b.Navigation("DynamicProperties");
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.Field", b =>

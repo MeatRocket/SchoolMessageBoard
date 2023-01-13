@@ -12,14 +12,17 @@ using System.Security.Cryptography;
 using static AdminPortal.Models.PasswordHasher;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Data.SqlClient;
+using Microsoft.Build.Framework;
 
 namespace AdminPortal.Controllers
 {
+    [DbLogging]
     [AdminAuthFilter]
     public class AdminController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private BoardContext _context { get; set; }
+        private static BoardContext _context { get; set; }
+
         private IHttpContextAccessor _accessor { get; set; }
 
         private int _pageSize = 10;

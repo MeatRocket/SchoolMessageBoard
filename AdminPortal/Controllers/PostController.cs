@@ -4,6 +4,7 @@ using MessageBoardClassLibrary.MessageBoardContext;
 using MessageBoardClassLibrary.Migrations;
 using MessageBoardClassLibrary.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
 using NuGet.Packaging;
@@ -13,6 +14,7 @@ using System.Text;
 
 namespace AdminPortal.Controllers
 {
+    [DbLogging]
     public class PostController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -92,95 +94,116 @@ namespace AdminPortal.Controllers
             return View(postViewModel);
         }
 
-        public IActionResult DynamicSubmitPostView()
+        public IActionResult DynamicSubmitTemplateView()
         {
             return View();
         }
 
-        public IActionResult DynamicSubmitPost(Template template)
+        public IActionResult DynamicSubmitTemplate(DynamicPostViewModel templateView)
         {
-            template.Id = Guid.NewGuid().ToString();
-            List<Template> Templates = _context.TemplateDetails.ToList();
+            templateView.Template.Id = Guid.NewGuid().ToString();
+            Template Template = _context.DynamicTemplates.Include(x => x.DynamicProperties).FirstOrDefault(x => x.TemplateName == templateView.Template.TemplateName);
 
-            if (Templates.Count > 0)
+            if (Template == null)
             {
-                if (Templates.FirstOrDefault(x => x.PopertyName == template.PopertyName) != null)
-                {
-                    ModelState.AddModelError("UniquePropNameError", "Property Name Must Be Unique For Each Template Name!");
-                    return View("DynamicSubmitPostView");
-                }
-            }
-            User user = _context.Users.First(x => x.Id == _accessor.HttpContext.Session.GetString("UserSession"));
-            //_context.TemplateDetails.Add(template);
-            user.TemplateDetails.Add(template);
-            _context.Update(user);
-            _context.SaveChanges();
+                //add Template if it doesnt exist
+                templateView.Template.DynamicProperties.Add(new() { Id = Guid.NewGuid().ToString(), PropertyName = templateView.DynamicMedia.PropertyName, Sequence = templateView.DynamicMedia.Sequence, Type = templateView.DynamicMedia.Type });
+                _context.DynamicTemplates.Add(templateView.Template);
+                _context.SaveChanges();
+                return View("DynamicSubmitTemplateView");
 
-            return View("DynamicSubmitPostView");
+            }
+
+            if (Template.DynamicProperties.FirstOrDefault(x => x.PropertyName == templateView.DynamicMedia.PropertyName) != null)
+            {
+                ModelState.AddModelError("UniquePropNameError", "Property Name Must Be Unique For Each Template Name!");
+            }
+            else
+            {
+                Template.DynamicProperties.Add(new() { Id = Guid.NewGuid().ToString(), PropertyName = templateView.DynamicMedia.PropertyName, Sequence = templateView.DynamicMedia.Sequence, Type = templateView.DynamicMedia.Type });
+                _context.Update(Template);
+                _context.SaveChanges();
+            }
+            return View("DynamicSubmitTemplateView");
         }
 
-        public IActionResult DynamicPostView(string templateName)
+        public IActionResult DynamicPostView(string postId)
         {
-            List<Template> Templates = _context.TemplateDetails.OrderBy(x => x.PopertySequence).ToList().Where(x => x.Name.Equals(templateName, StringComparison.OrdinalIgnoreCase)).ToList();
+            DynamicPost post = _context.DynamicPosts.Include(x => x.DynamicProperties.OrderBy(x => x.Sequence)).First(x => x.Id == postId);
 
-            return View(Templates);
+            return View(post);
         }
 
         public IActionResult DynamicTemplatePicker()
         {
-            List<Template> Templates = _context.TemplateDetails.ToList().DistinctBy(x => x.Name).ToList();
-            List<string> TemplateNames = Templates.Select(x => x.Name).ToList();
+            List<Template> Templates = _context.DynamicTemplates.ToList();
+            List<string> TemplateNames = Templates.Select(x => x.TemplateName).ToList();
 
             return View(TemplateNames);
         }
 
         [HttpGet]
-        public IActionResult DynamicTemplateEditor(string TemplateName)
+        public IActionResult DynamicPostEditor(string templateName)
         {
-            List<Template> Templates = _context.TemplateDetails.Where(x => x.Name == TemplateName).ToList();
-
-            return View(Templates);
+            Template template = _context.DynamicTemplates.Include(x => x.DynamicProperties).First(x => x.TemplateName == templateName);
+            template.DynamicProperties = template.DynamicProperties.OrderBy(x => x.Sequence).ToList();
+            return View(template);
         }
 
         [HttpPost]
-        public async Task<IActionResult> DynamicTemplateEditor(IFormCollection formColletion)
+        public async Task<IActionResult> DynamicPostEditor(IFormCollection formColletion)
         {
-            var changedTemplates = formColletion.ToList();
+
+            List<KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues>> changedTemplates = formColletion.ToList();
             string TemplateName = changedTemplates[0].Value;
-            List<Template> TemplateComponents = _context.TemplateDetails.Where(x => x.Name == TemplateName).ToList();
+            Template Template = _context.DynamicTemplates.Include(x => x.DynamicProperties).First(x => x.TemplateName == TemplateName);
+
+            List<DynamicProperty> properties = Template.DynamicProperties;
+            List<DynamicProperty> postProperties = new();
+
+            foreach(DynamicProperty property in properties)
+            {
+                postProperties.Add(new() { Id = Guid.NewGuid().ToString(), PropertyName = property.PropertyName, Sequence = property.Sequence, Type = property.Type});
+            }
 
             for (int i = 1; i < changedTemplates.Count - 1; i++)
             {
-                var KeyValuePairs = changedTemplates[i];
-                if (TemplateComponents.First(x => x.PopertyName == KeyValuePairs.Key) != null && TemplateComponents.First(x => x.PopertyName == KeyValuePairs.Key).PopertyType == "Media")
-                {
-                    TemplateComponents.First(x => x.PopertyName == KeyValuePairs.Key).PopertyValue = GetDynamicMediaFiles(KeyValuePairs.Value);
-                }
-                else
-                    TemplateComponents.First(x => x.PopertyName == KeyValuePairs.Key).PopertyValue = KeyValuePairs.Value;
+                KeyValuePair<string, Microsoft.Extensions.Primitives.StringValues> KeyValuePairs = changedTemplates[i];
+                postProperties.First(x => x.PropertyName == KeyValuePairs.Key).Value = KeyValuePairs.Value;
             }
 
-            _context.Users.First(x => x.Id == _accessor.HttpContext.Session.GetString("UserSession")).TemplateDetails.AddRange(TemplateComponents);
+            foreach (DynamicProperty property in postProperties.Where(x => x.Type == "Media"))
+            {
+                property.Value = GetDynamicMediaFile(formColletion.Files.Where(x => x.Name == property.PropertyName).ToList());
+            }
+
+            User user = _context.Users.First(x => x.Id == _accessor.HttpContext.Session.GetString("UserSession"));
+
+            if (user.DynamicPosts == null || user.DynamicPosts.Count == 0)
+                user.DynamicPosts = new List<DynamicPost>();
+
+            DynamicPost dynamicPost = new (){ Id = Guid.NewGuid().ToString(), DynamicProperties = postProperties, DatePosted = DateTime.Now };
+
+            _context.Users.First(x => x.Id == _accessor.HttpContext.Session.GetString("UserSession")).DynamicPosts.Add(dynamicPost);
+
             _context.SaveChanges();
-            return RedirectToAction("DynamicPostView", new { templateName = TemplateName });
+            return RedirectToAction("DynamicPostView", new { postId = dynamicPost.Id});
         }
 
-        public string GetDynamicMediaFiles(Microsoft.Extensions.Primitives.StringValues files)
+        public string GetDynamicMediaFile(List<IFormFile> files)
         {
-            List<string> Files = new();
             string savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/DynamicUploadedFiles");
             string MediaId;
-
-
-            foreach (string fileName in files)
+            StringBuilder SavedFiles = new StringBuilder();
+            foreach (var file in files)
             {
-                MediaId = Guid.NewGuid().ToString() + Path.GetExtension(fileName);
-                Files.Add(MediaId);
+                MediaId = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                 Stream stream = new FileStream(Path.Combine(savePath, MediaId), FileMode.Create);
-                stream.CopyTo(stream);
+                file.CopyTo(stream);
+                SavedFiles.Append(MediaId + " ");
             }
 
-            return string.Join(" ", Files);
+            return SavedFiles.ToString().Trim();
         }
         public List<Media> GetMedia(ICollection<IFormFile> formFiles)
         {

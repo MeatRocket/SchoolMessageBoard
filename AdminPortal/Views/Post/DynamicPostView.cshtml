@@ -3,21 +3,21 @@
     ViewData["Title"] = "DPV";
 }
 
-@model List<Template>
+@model DynamicPost
 
-<input name="templateName" type="hidden" value="@Model.First().Name" />
+<input name="postId" type="hidden" value="@Model.Id" />
 <div class="col">
-    @for (int i = 0; i < Model.Count; i++)
+    @for (int i = 0; i < Model.DynamicProperties.Count; i++)
     {
         <div class="row">
-            @for (int j = i + 1; j < Model.Count; j++)
+            @for (int j = i + 1; j < Model.DynamicProperties.Count; j++)
             {
-                @switch (Model[i].PopertyType)
+                @switch (Model.DynamicProperties[i].Type)
                 {
                     case "Title":
                         <div class="col-2">
                             <h2>
-                                @Model[i].PopertyValue
+                                @Model.DynamicProperties[i].Value
                             </h2>
                         </div>
 
@@ -26,7 +26,7 @@
                     case "Description":
                         <div class="col-10">
                             <p>
-                                @Model[i].PopertyValue
+                                @Model.DynamicProperties[i].Value
                             </p>
                         </div>
 
@@ -34,40 +34,15 @@
 
                     case "Media":
                         <div class="col-6">
-                            <div id="carouselExampleCaptions" class="carousel slide carousel-dark">
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <div class="fixed-ratio-resize">
-                                            <img src="./DynamicUploadedFiles/@Model[i].PopertyValue.Split(" ")[0]" class="d-block w-100">
-                                        </div>
-
+                            <div class="row">
+                                @for (int k = 0; k < Model.DynamicProperties[i].Value.Split(" ").Length; k++)
+                                {
+                                    <div class="col-4">
+                                        <img src="../DynamicUploadedFiles/@Model.DynamicProperties[i].Value.Split(" ")[k]" class="d-block w-100">
                                     </div>
-                                    @if (Model[i].PopertyValue.Split(" ").Length > 1)
-                                    {
-                                        @for (int k = 1; k < Model[i].PopertyValue.Split(" ").Length; k++)
-                                        {
-                                            <div class="carousel-item">
-                                                <div class="fixed-ratio-resize">
-                                                    <img src="./DynamicUploadedFiles/@Model[i].PopertyValue.Split(" ")[k]" class="d-block w-100">
-                                                </div>
-                                            </div>
-                                        }
-                                    }
 
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
+                                }
                             </div>
-
-                            @*                            <p>
-            @Model[i].PopertyValue
-            </p>*@
                         </div>
 
                         break;
@@ -76,20 +51,20 @@
                         break;
 
                 }
-                @if (Model[i].PopertySequence != Model[j].PopertySequence)
+                @if (Model.DynamicProperties[i].Sequence != Model.DynamicProperties[j].Sequence)
                     break;
 
                 i++;
             }
 
-            @if (i + 1 == Model.Count)
+            @if (i + 1 == Model.DynamicProperties.Count)
             {
-                @switch (Model[i].PopertyType)
+                @switch (Model.DynamicProperties[i].Type)
                 {
                     case "Title":
                         <div class="col-2">
                             <h2>
-                                @Model[i].PopertyValue
+                                @Model.DynamicProperties[i].Value
                             </h2>
                         </div>
 
@@ -98,50 +73,27 @@
                     case "Description":
                         <div class="col-10">
                             <p>
-                                @Model[i].PopertyValue
+                                @Model.DynamicProperties[i].Value
                             </p>
                         </div>
 
                         break;
+
                     case "Media":
                         <div class="col-6">
-                            <div id="carouselExampleCaptions" class="carousel slide carousel-dark">
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <div class="fixed-ratio-resize">
-                                            <img src="./DynamicUploadedFiles/@Model[i].PopertyValue.Split(" ")[0]" class="d-block w-100" >
-                                        </div>
-
+                            <div class="row">
+                                @for (int k = 0; k < Model.DynamicProperties[i].Value.Split(" ").Length; k++)
+                                {
+                                    <div class="col-4">
+                                        <img src="../DynamicUploadedFiles/@Model.DynamicProperties[i].Value.Split(" ")[k]" class="d-block w-100">
                                     </div>
-                                    @if (Model[i].PopertyValue.Split(" ").Length > 1)
-                                    {
-                                        @for (int k = 1; k < Model[i].PopertyValue.Split(" ").Length; k++)
-                                        {
-                                            <div class="carousel-item">
-                                                <div class="fixed-ratio-resize">
-                                                    <img src="./DynamicUploadedFiles/@Model[i].PopertyValue.Split(" ")[k]" class="d-block w-100" >
-                                                </div>
-                                            </div>
-                                        }
-                                    }
 
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
+                                }
                             </div>
-
-                            @*                            <p>
-            @Model[i].PopertyValue
-            </p>*@
                         </div>
 
                         break;
+
                     default:
                         break;
 
