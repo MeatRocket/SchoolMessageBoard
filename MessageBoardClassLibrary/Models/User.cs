@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace MessageBoardClassLibrary.Models
 {
@@ -43,8 +44,13 @@ namespace MessageBoardClassLibrary.Models
         [MaxLength(100)]
         public string Role { get; set; }
         [Required]
+        [JsonIgnore]
         public virtual ICollection<SchoolUser> Schools { get; set; }
+        [JsonIgnore]
+
         public virtual ICollection<Post> Posts { get; set; }
+        [JsonIgnore]
+
         public virtual ICollection<DynamicPost> DynamicPosts { get; set; }
 
     }

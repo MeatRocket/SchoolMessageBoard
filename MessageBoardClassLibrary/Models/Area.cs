@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MessageBoardClassLibrary.Models
@@ -25,6 +26,8 @@ namespace MessageBoardClassLibrary.Models
         [Required]
         [MaxLength(200)]
         public Field Field { get; set; }
+        [JsonIgnore]
+
         public virtual ICollection<School> Schools { get; set; }
 
     }

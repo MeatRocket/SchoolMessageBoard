@@ -1,0 +1,12 @@
+﻿<h3>This is Component Test</h3>
+<p>@num</p>
+<button onclick=@Increment>Add Up</button>
+
+@code {
+    public int num = 0;
+
+    public void Increment()
+    {
+        num++;
+    }
+}

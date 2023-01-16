@@ -5,34 +5,33 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using NuGet.Configuration;
 using AdminPortal.Models;
+using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new DbLogging());
+});
+
+
 builder.Services.AddDbContext<BoardContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
-builder.Services.AddScoped<DbLogger>();
+
+builder.Services.AddScoped<DbLogging>();
+
+builder.Services.AddServerSideBlazor();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<BoardContext>();
+
 builder.Services.AddSession();
+
 builder.Services.AddHttpContextAccessor();
-
-//builder.Host.ConfigureLogging(logging =>
-//{
-//    logging.ClearProviders();
-//    logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
-//    logging.AddDebug();
-//    logging.AddConsole();
-//});
-
-
-//builder.Logging.AddConfiguration();
-//builder.Services.AddLogging();
-//builder.Services.AddScoped<DbLogging>();
 
 
 var app = builder.Build();
@@ -52,6 +51,8 @@ app.UseRouting();
 
 app.UseAuthorization();
 app.UseSession();
+
+app.MapBlazorHub();
 
 app.MapControllerRoute(
     name: "default",

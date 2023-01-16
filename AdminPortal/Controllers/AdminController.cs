@@ -16,7 +16,6 @@ using Microsoft.Build.Framework;
 
 namespace AdminPortal.Controllers
 {
-    [DbLogging]
     [AdminAuthFilter]
     public class AdminController : Controller
     {

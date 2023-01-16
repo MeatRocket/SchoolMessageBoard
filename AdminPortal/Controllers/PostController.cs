@@ -14,7 +14,6 @@ using System.Text;
 
 namespace AdminPortal.Controllers
 {
-    [DbLogging]
     public class PostController : Controller
     {
         private readonly ILogger<HomeController> _logger;

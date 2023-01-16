@@ -5,9 +5,30 @@
 @using System.Web;
 @model AdminViewModel
 
-    <link rel="stylesheet" href="~/css/DeletionConfirmation.css" asp-append-version="true" />
+<link rel="stylesheet" href="~/css/DeletionConfirmation.css" asp-append-version="true" />
 
-<h1>Manage Users</h1>
+<table class="table table-striped table-hover table-responsive">
+    <thead>
+        <tr>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "user", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Name</a></th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "email", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Email</a></th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "role", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Role</a></th>
+            <th>School</th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "valid", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Is Valid</a></th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "active", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Is Active</a></th>
+            <th><a class="_noDecoration" href="@Url.Action("ManageUsers", new { sortField = "postCount", sortOrder = ViewBag.SortOrder, PageNumber = ViewBag.PageNumber ?? 1})">Posts</a></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <UserListComponent>@(await Html.RenderComponentAsync<AdminPortal.Views.Components.UserListComponent>(RenderMode.ServerPrerendered, new { Users = @Model.Users, TotalSize = @ViewBag.TotalSize }))</UserListComponent>
+
+</table>
+
+<script src="~/js/Delete.js" asp-append-version="true"></script>
+
+@*<h1>Manage Users</h1>
 
 <form asp-action="ManageUsers" method="get">
     <div class="form-actions no-color">
@@ -57,7 +78,7 @@
 
                 }
                 else
-                {   
+                {
                         <td> 0 </td>
                 }
                 <td><a class="btn btn-primary" href="@Url.Action("EditUser",new{Id = user.Id}) ">Edit</a></td>
@@ -88,3 +109,4 @@
 }
 
 <script src="~/js/Delete.js" asp-append-version="true"></script>
+*@

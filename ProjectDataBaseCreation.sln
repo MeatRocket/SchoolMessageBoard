@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageBoardClassLibrary", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminPortal", "AdminPortal\AdminPortal.csproj", "{21D12FE0-1903-4AF3-A345-E24B6E94BBF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyProject", "DummyProject\DummyProject.csproj", "{240D884B-9F99-49A4-B72F-228C83891802}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DummyProject", "DummyProject\DummyProject.csproj", "{240D884B-9F99-49A4-B72F-228C83891802}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,12 +1,17 @@
 ﻿using MessageBoardClassLibrary.Models;
+using Newtonsoft.Json;
 
 namespace AdminPortal.Models
 {
     public class AdminViewModel : UserViewModel
     {
+        [JsonIgnore]
         public List<User>? Users { get; set; }
+        [JsonIgnore]
         public List<Area>? Areas { get; set; }
+        [JsonIgnore]
         public List<Field>? Fields { get; set; }
+        [JsonIgnore]
         public List<Post>? Posts { get; set; }
 
         public List<SchoolUser>? SchoolUsers { get; set; }

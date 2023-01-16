@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace MessageBoardClassLibrary.Models
@@ -39,6 +40,8 @@ namespace MessageBoardClassLibrary.Models
         public string Title { get; set; }
         [Required]
         public string Description { get; set; }
+        [JsonIgnore]
+
         public virtual ICollection<Media> Media { get; set; }
 
     }

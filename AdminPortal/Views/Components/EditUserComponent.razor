@@ -1,31 +1,25 @@
-﻿@{
-    ViewData["Title"] = "Edit User";
-}
-@using MessageBoardClassLibrary.Models;
-@model AdminViewModel
+﻿@using MessageBoardClassLibrary.Models;
+@using Models
 
-
-<EditUserComponent>@(await Html.RenderComponentAsync<AdminPortal.Views.Components.UserListComponent>(RenderMode.ServerPrerendered, new { AdminViewModel = @Model }))</EditUserComponent>
-
-@*<h1> Edit @Model.EditUser.FirstName @Model.EditUser.LastName Info</h1>
+<h1> Edit @AdminViewModel.EditUser.FirstName @AdminViewModel.EditUser.LastName Info</h1>
 
 <form asp-action="EditUser" method="post">
-    <input type="hidden" value="@Model.EditUser.Id" name="EditUser.Id" />
+    <input type="hidden" value="EditUser.Id" name="EditUser.Id" />
     <div class="row">
         <div class="col">
             <label class="sr-only">First Name</label>
-            <input class="form-control" type="text" alt="First Name" placeholder="First Name" name="FirstName" value="@Model.EditUser.FirstName" />
+            <input class="form-control" type="text" alt="First Name" placeholder="First Name" name="FirstName" value="@AdminViewModel.EditUser.FirstName" />
         </div>
 
         <div class="col">
             <label class="sr-only">Last Name</label>
-            <input class="form-control" type="text" alt="Last Name" placeholder="Last Name" name="LastName" value="@Model.EditUser.LastName" />
+            <input class="form-control" type="text" alt="Last Name" placeholder="Last Name" name="LastName" value="@AdminViewModel.EditUser.LastName" />
         </div>
     </div>
 
     <div class="col">
         <label class="sr-only">Email</label>
-        <input class="form-control" type="email" alt="Email" placeholder="Email" name="Email" value="@Model.EditUser.Email" />
+        <input class="form-control" type="email" alt="Email" placeholder="Email" name="Email" value="@AdminViewModel.EditUser.Email" />
     </div>
 
     <div class="col">
@@ -47,21 +41,21 @@
 
         <div class="col-md-2 _checkBoxPadding">
             <label class="sr-only">Is Active</label>
-            <input class="form-check-input _validatinCheckbox" type="checkbox" name="IsActivated" value="@Model.EditUser.IsActivated" checked="@Model.EditUser.IsActivated">
+            <input class="form-check-input _validatinCheckbox" type="checkbox" name="IsActivated" value="@AdminViewModel.EditUser.IsActivated" checked="@AdminViewModel.EditUser.IsActivated">
         </div>
 
         <div class="col-md-2 _checkBoxPadding">
             <label>Is Valid</label>
-            <input class="form-check-input _validatinCheckbox" type="checkbox" name="IsValidated" value="@Model.EditUser.IsValidated" checked="@Model.EditUser.IsValidated">
+            <input class="form-check-input _validatinCheckbox" type="checkbox" name="IsValidated" value="@AdminViewModel.EditUser.IsValidated" checked="@AdminViewModel.EditUser.IsValidated">
         </div>
 
         <div class="form-group col-md-2 _formSelector">
             <label>District</label>
             <select class="form-control" name="Field" id="Field">
                 <option value="" selected>Select a District</option>
-                @foreach (Field field in @Model.Fields)
+                @foreach (Field field in @AdminViewModel.Fields)
                 {
-                    @if (Model.Schools.Where(x => x.Area.Field.Id == field.Id).ToList().Count != 0)
+                    @if (AdminViewModel.Schools.Where(x => x.Area.Field.Id == field.Id).ToList().Count != 0)
                     {
                         <option value="@field.Id">@field.Name</option>
                     }
@@ -70,10 +64,10 @@
         </div>
 
         <div class="form-group col _checkboxContainer">
-            @foreach (Field field in @Model.Fields)
+            @foreach (Field field in @AdminViewModel.Fields)
             {
                 <div class="_hide _checkBox" id="@field.Id">
-                    @foreach (School school in Model.Schools.Where(x => x.Area.Field.Id == field.Id))
+                    @foreach (School school in AdminViewModel.Schools.Where(x => x.Area.Field.Id == field.Id))
                     {
                         <div class="form-check form-check-inline">
                             <label class="form-check-label">@school.Name</label>
@@ -84,6 +78,4 @@
             }
         </div>
     </div>
-</form>*@
-
-<script src="~/js/Fields.js"></script>
+</form>
