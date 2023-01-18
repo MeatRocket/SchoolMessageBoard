@@ -1,0 +1,50 @@
+﻿@using Models
+@using MessageBoardClassLibrary.Models
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web;
+@inject NavigationManager NavigationManager
+
+
+<form asp-action="ManageUsers" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a href="ManageUsers">Back to Full List</a>
+        </p>
+    </div>
+</form>
+
+<tbody>
+    @foreach (User user in Users)
+    {
+        <tr id="@user.Id">
+            <td>@user.FirstName @user.LastName</td>
+            <td>@user.Email</td>
+            <td>@user.Role</td>
+
+            <td>
+                @foreach (SchoolUser school in user.Schools)
+                {
+                    @school.School.Name
+                    <br />
+                }
+            </td>
+
+            <td>@user.IsValidated</td>
+            <td>@user.IsActivated</td>
+            @if (@user.Posts != null)
+            {
+                <td> @user.Posts.Count </td>
+            }
+            else
+            {
+                <td> 0 </td>
+            }
+@*            <td><button class="btn btn-primary" onclick="@(RedirectToEdit(@user.Id))">Edit</button></td>
+        *@
+            <td><a class="btn btn-primary" href="Admin/EditUser?Id=+@user.Id">Edit</a></td>
+            <td><button class="btn btn-danger" onclick="ShowPopup('@user.Id')">Delete</button></td>
+        </tr>
+    }
+</tbody>

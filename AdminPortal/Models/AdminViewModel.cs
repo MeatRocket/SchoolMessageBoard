@@ -5,7 +5,6 @@ namespace AdminPortal.Models
 {
     public class AdminViewModel : UserViewModel
     {
-        [JsonIgnore]
         public List<User>? Users { get; set; }
         [JsonIgnore]
         public List<Area>? Areas { get; set; }

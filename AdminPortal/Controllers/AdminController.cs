@@ -101,6 +101,10 @@ namespace AdminPortal.Controllers
                     break;
             }
 
+            foreach (User user in Admin.Users)
+                foreach (var school in user.Schools)
+                    school.User = null;
+
 
             return View(Admin);
         }
@@ -108,15 +112,14 @@ namespace AdminPortal.Controllers
         [HttpGet]
         public IActionResult EditUser(string Id)
         {
-            Admin.EditUser = _context.Users.FirstOrDefault(x => x.Id == Id);
+            Admin.EditUser = _context.Users.FirstOrDefault(x => x.Id == Id.Trim());
             Admin.Fields = _context.Fields.ToList();
             Admin.Schools = _context.Schools.Include(x => x.Area.Field).ToList();
             Admin.Areas = _context.Areas.ToList();
 
             if (Admin.EditUser == null)
             {
-                Admin.EditSchool = _context.Schools.FirstOrDefault(x => x.Id == Id);
-                return View("EditSchool", Admin);
+                return RedirectToAction("ManageUsers");
             }
 
             return View("EditUser", Admin);

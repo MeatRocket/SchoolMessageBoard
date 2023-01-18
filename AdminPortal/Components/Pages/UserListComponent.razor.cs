@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using AdminPortal.Models;
 using MessageBoardClassLibrary.Models;
 using Microsoft.AspNetCore.Components;
+using System.Net.NetworkInformation;
+using Microsoft.AspNetCore.Components.Web;
 
-namespace AdminPortal.Views.Components
+namespace AdminPortal.Components.Pages
 {
     public partial class UserListComponent
     {

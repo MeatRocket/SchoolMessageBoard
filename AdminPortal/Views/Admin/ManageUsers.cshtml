@@ -22,11 +22,37 @@
         </tr>
     </thead>
 
-    <UserListComponent>@(await Html.RenderComponentAsync<AdminPortal.Views.Components.UserListComponent>(RenderMode.ServerPrerendered, new { Users = @Model.Users, TotalSize = @ViewBag.TotalSize }))</UserListComponent>
-
+    <component type="typeof(UserListComponent)" render-mode="ServerPrerendered" param-Users = "@Model.Users" param-TotalSize = "@ViewBag.TotalSize"></component>
 </table>
 
+@for (int i = 1; i <= ViewBag.TotalSize; i++)
+{
+    <a class="_noDecoration" href="@Url.Action("ManageUsers", new{ PageNumber = i})">
+        @i
+    </a>
+}
+
+@foreach (User user in Model.Users)
+{
+    <div class="_popUp _@user.Id">
+        <div class="_deleteConfirmation">
+        <h3> Are you sure you want to Delete @user.FirstName @user.LastName's Account</h3>
+        <div class="_buttonGroup">
+            <button class="btn btn-danger" onclick="DeleteUser('@user.Id')">Delete</button>
+            <button class="btn btn-primary" onclick="HidePopup('@user.Id')">Cancel</button>
+        </div>
+        </div class="_deleteConfirmation">
+    </div>
+}
+
 <script src="~/js/Delete.js" asp-append-version="true"></script>
+
+    @section scripts{
+        <script src="https://localhost:7141/_framework/blazor.server.js"></script>
+    }
+
+
+
 
 @*<h1>Manage Users</h1>
 

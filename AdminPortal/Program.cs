@@ -11,9 +11,17 @@ using System.Text.Json.Serialization;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddServerSideBlazor();
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new DbLogging());
+}).AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.ReferenceLoopHandling= ReferenceLoopHandling.Ignore;
+}).AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+    options.JsonSerializerOptions.MaxDepth= 100;
 });
 
 
@@ -24,7 +32,7 @@ builder.Services.AddDbContext<BoardContext>(options =>
 
 builder.Services.AddScoped<DbLogging>();
 
-builder.Services.AddServerSideBlazor();
+//builder.Services.AddRazorPages();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<BoardContext>();
@@ -52,10 +60,11 @@ app.UseRouting();
 app.UseAuthorization();
 app.UseSession();
 
-app.MapBlazorHub();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapBlazorHub();
+app.UsePathBase("/subsite");
 
 app.Run();

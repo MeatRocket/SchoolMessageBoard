@@ -42,7 +42,7 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasIndex("FieldId");
 
-                    b.ToTable("Areas");
+                    b.ToTable("Areas", (string)null);
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.DbLog", b =>
@@ -71,7 +71,7 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Logs");
+                    b.ToTable("Logs", (string)null);
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.DynamicPost", b =>
@@ -92,7 +92,7 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("DynamicPosts");
+                    b.ToTable("DynamicPosts", (string)null);
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.DynamicProperty", b =>
@@ -132,7 +132,7 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasIndex("TemplateId");
 
-                    b.ToTable("DynamicMedia");
+                    b.ToTable("DynamicMedia", (string)null);
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.Field", b =>
@@ -148,7 +148,7 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Fields");
+                    b.ToTable("Fields", (string)null);
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.Media", b =>
@@ -176,7 +176,7 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Media");
+                    b.ToTable("Media", (string)null);
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.Post", b =>
@@ -217,7 +217,7 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.School", b =>
@@ -240,7 +240,7 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasIndex("AreaId");
 
-                    b.ToTable("Schools");
+                    b.ToTable("Schools", (string)null);
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.SchoolUser", b =>
@@ -265,7 +265,7 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SchoolUsers");
+                    b.ToTable("SchoolUsers", (string)null);
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.Template", b =>
@@ -281,7 +281,7 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DynamicTemplates");
+                    b.ToTable("DynamicTemplates", (string)null);
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.User", b =>
@@ -336,7 +336,7 @@ namespace MessageBoardClassLibrary.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("MessageBoardClassLibrary.Models.Area", b =>

@@ -40,9 +40,7 @@ namespace MessageBoardClassLibrary.Models
         public string Title { get; set; }
         [Required]
         public string Description { get; set; }
-        [JsonIgnore]
-
         public virtual ICollection<Media> Media { get; set; }
-
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

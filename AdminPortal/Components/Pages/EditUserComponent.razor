@@ -1,10 +1,12 @@
 ﻿@using MessageBoardClassLibrary.Models;
-@using Models
+@using AdminPortal.Models
+@using Microsoft.JSInterop;
+@inject IJSRuntime Js
 
 <h1> Edit @AdminViewModel.EditUser.FirstName @AdminViewModel.EditUser.LastName Info</h1>
 
 <form asp-action="EditUser" method="post">
-    <input type="hidden" value="EditUser.Id" name="EditUser.Id" />
+    <input type="hidden" value="@AdminViewModel.EditUser.Id" name="EditUser.Id" />
     <div class="row">
         <div class="col">
             <label class="sr-only">First Name</label>

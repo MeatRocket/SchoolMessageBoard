@@ -17,6 +17,6 @@ namespace MessageBoardClassLibrary.Models
         public User User { get; set; }
         public List<DynamicProperty> DynamicProperties { get; set; } = new();
         public DateTime DatePosted { get; set; } = DateTime.Now;
-
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

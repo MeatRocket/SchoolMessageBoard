@@ -5,8 +5,12 @@
 @model AdminViewModel
 
 
-<EditUserComponent>@(await Html.RenderComponentAsync<AdminPortal.Views.Components.UserListComponent>(RenderMode.ServerPrerendered, new { AdminViewModel = @Model }))</EditUserComponent>
-
+<component type="typeof(EditUserComponent)" render-mode="ServerPrerendered" param-AdminViewModel = "@Model"></component>
+@section scripts{
+    <script src="https://localhost:7141/_framework/blazor.server.js"></script>
+    }
+@*<EditUserComponent>@(await Html.RenderComponentAsync<AdminPortal.Components.Pages.EditUserComponent>(RenderMode.ServerPrerendered, new { AdminViewModel = @Model }))</EditUserComponent>
+*@
 @*<h1> Edit @Model.EditUser.FirstName @Model.EditUser.LastName Info</h1>
 
 <form asp-action="EditUser" method="post">
@@ -87,3 +91,4 @@
 </form>*@
 
 <script src="~/js/Fields.js"></script>
+<script src="~/js/FieldsBlazor.js"></script>
