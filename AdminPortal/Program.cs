@@ -7,6 +7,7 @@ using NuGet.Configuration;
 using AdminPortal.Models;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
+using AdminPortal.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,13 +16,6 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new DbLogging());
-}).AddNewtonsoftJson(options =>
-{
-    options.SerializerSettings.ReferenceLoopHandling= ReferenceLoopHandling.Ignore;
-}).AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
-    options.JsonSerializerOptions.MaxDepth= 100;
 });
 
 
@@ -30,7 +24,13 @@ builder.Services.AddDbContext<BoardContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
+builder.Services.AddDbContextFactory<BoardContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+});
+
 builder.Services.AddScoped<DbLogging>();
+builder.Services.AddSingleton<CommentServices>();
 
 //builder.Services.AddRazorPages();
 

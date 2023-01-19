@@ -1,0 +1,12 @@
+﻿@using AdminPortal.Services;
+@using MessageBoardClassLibrary.MessageBoardContext;
+@using Microsoft.EntityFrameworkCore;
+@inject IDbContextFactory<BoardContext> DbFactory
+@inject CommentServices CommentServices
+@implements IDisposable
+
+<h1>Comment Section</h1>
+
+<Microsoft.AspNetCore.Components.Forms.DataAnnotationsValidator>
+
+</Microsoft.AspNetCore.Components.Forms.DataAnnotationsValidator>
