@@ -8,11 +8,16 @@ using AdminPortal.Models;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 using AdminPortal.Services;
+using AdminPortal.Hubs;
+using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.SignalR.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddServerSideBlazor();
+
 builder.Services.AddControllersWithViews(options =>
 {
     options.Filters.Add(new DbLogging());
@@ -24,14 +29,18 @@ builder.Services.AddDbContext<BoardContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
 });
 
-builder.Services.AddDbContextFactory<BoardContext>(options =>
+builder.Services.AddScoped<DbLogging>();
+builder.Services.AddTransient<CommentServices>();
+
+
+builder.Services.AddResponseCompression(opts =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Default"));
+    opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+        new[] { "application/octet-stream" });
 });
 
-builder.Services.AddScoped<DbLogging>();
-builder.Services.AddSingleton<CommentServices>();
-
+builder.Services.AddSignalR();
+builder.Services.AddScoped<HubConnectionBuilder>();
 //builder.Services.AddRazorPages();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -41,8 +50,10 @@ builder.Services.AddSession();
 
 builder.Services.AddHttpContextAccessor();
 
-
 var app = builder.Build();
+
+
+app.UseResponseCompression();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -65,6 +76,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapBlazorHub();
+app.MapHub<CommentHub>("/CommentHub");
 app.UsePathBase("/subsite");
 
 app.Run();

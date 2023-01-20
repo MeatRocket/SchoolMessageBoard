@@ -104,3 +104,9 @@
         <br />
     }
 </div>
+
+
+<component type="typeof(CommentComponent)" render-mode="ServerPrerendered" param-PostId="@Model.Id" param-UserId='Context.Session.GetString("UserSession")'></component>
+@section scripts{
+    <script src="https://localhost:7141/_framework/blazor.server.js"></script>
+    }
